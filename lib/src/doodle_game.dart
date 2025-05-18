@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:doodle_maze/src/components/spring.dart';
 import 'package:doodle_maze/src/components/booster.dart';
 import 'package:doodle_maze/src/components/brick.dart';
 import 'package:doodle_maze/src/components/goal.dart';
@@ -152,6 +153,7 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
     world.removeAll(world.children.query<Brick>());
     world.removeAll(world.children.query<Goal>());
     world.removeAll(world.children.query<Trap>());
+    world.removeAll(world.children.query<Spring>());
   }
 
   void startGame() async {
@@ -179,18 +181,23 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
 
     int boosterSpawnDistance = 0;
     int trapSpawnDistance = 0;
+    int springSpawnDistance = 0;
+
     // Include bricks in defined locations
     for (int i = 0; i < brickRenderHeights.length; i++) {
+
+      // Define random x positions for elements
       final brickX = rand.nextDouble() * (playWidth - brickWidth);
       final boosterX = rand.nextDouble() * (playWidth - brickWidth);
       final trapX = rand.nextDouble() * (playWidth - brickWidth);
+      final springX = rand.nextDouble() * (playWidth - brickWidth);
 
       // Include booster if there is enough height between the other boosters.
       if (boosterSpawnDistance >=
           levelModifier.boosterSpawnSeparation.toInt()) {
         final booster = Booster(
             position: Vector2(
-                boosterX + boosterWidth / 2, brickRenderHeights[i] - 70),
+                boosterX + boosterWidth / 2, brickRenderHeights[i] - 50),
             size: Vector2(boosterWidth, boosterHeight),
             sprite: extraSprites.getSprite('block_exclamation_active'));
         world.add(booster);
@@ -200,14 +207,13 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
       boosterSpawnDistance += levelModifier.brickSpawnSeparation.toInt();
 
       // Trap must have level specific distance off other trap, and
-      // it can't spawn in the bottom part of the playArea to make sure the player can spawn correctly.
-      if (
-        trapSpawnDistance >= levelModifier.trapSpawnSeparation.toInt() && 
-        brickRenderHeights[i] <= playHeight - 1000
-      ) {
+      // it can't spawn in the bottom part of the playArea to make sure the player can spawn correctly (first possible spawn height 30000 - 1000).
+      // 100 offset to not spawn on top of brick or spring
+      if (trapSpawnDistance >= levelModifier.trapSpawnSeparation.toInt() &&
+          brickRenderHeights[i] <= playHeight - 1000) {
         final trap = Trap(
             position:
-                Vector2(trapX + trapWidth / 2, brickRenderHeights[i] - 140),
+                Vector2(trapX + trapWidth / 2, brickRenderHeights[i] - 100),
             size: Vector2(trapWidth, trapheight),
             sprite: extraSprites.getSprite('bomb'));
         world.add(trap);
@@ -215,6 +221,21 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
       }
 
       trapSpawnDistance += levelModifier.brickSpawnSeparation.toInt();
+
+      // Also spring must have level specific distance off other spring, and
+      // it can't spawn in the bottom part of the playArea where player spawns (first possible spawn height 30000 - 1600).
+      // 150 offset to not spawn on top of brick or spring
+      if (springSpawnDistance >= levelModifier.springSpawnSeparation.toInt() &&
+          brickRenderHeights[i] <= playHeight - 1600) {
+        final backPusher = Spring(
+            position: Vector2(springX + springWidth / 2, brickRenderHeights[i] - 150),
+            size: Vector2(springWidth, springHeight),
+            sprite: extraSprites.getSprite('spring'));
+        world.add(backPusher);
+        springSpawnDistance = 0;
+      }
+
+      springSpawnDistance += levelModifier.brickSpawnSeparation.toInt();
 
       // First brick is the goal, rendered top to down.
       if (i == 0) {
@@ -233,7 +254,6 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
         world.add(brick);
       }
     }
-
     // game ends when player touches the golden gem on top
   }
 

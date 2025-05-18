@@ -16,7 +16,7 @@ class GameApp extends StatefulWidget {
 
 class _GameAppState extends State<GameApp> {
   late final DoodleGame game;
-  
+
   @override
   void initState() {
     super.initState();
@@ -36,16 +36,19 @@ class _GameAppState extends State<GameApp> {
       game.levelModifier.boosterSpawnSeparation = boosterSpawnSeparation;
       game.levelModifier.brickSpawnSeparation = brickSpawnSeparation;
       game.levelModifier.trapSpawnSeparation = trapSpawnSeparation;
+      game.levelModifier.springSpawnSeparation = springSpawnSeparation;
     } else if (game.gameDifficulty.value == 2) {
       game.levelModifier.boosterVelocity = boosterVelocityMedium;
       game.levelModifier.boosterSpawnSeparation = boosterSpawnSeparationMedium;
       game.levelModifier.brickSpawnSeparation = brickSpawnSeparationMedium;
       game.levelModifier.trapSpawnSeparation = trapSpawnSeparationMedium;
+      game.levelModifier.springSpawnSeparation = springSpawnSeparationMedium;
     } else {
       game.levelModifier.boosterVelocity = boosterVelocityHard;
       game.levelModifier.boosterSpawnSeparation = boosterSpawnSeparationHard;
       game.levelModifier.brickSpawnSeparation = brickSpawnSeparationHard;
       game.levelModifier.trapSpawnSeparation = trapSpawnSeparationHard;
+      game.levelModifier.springSpawnSeparation = springSpawnSeparationHard;
     }
 
     game.startGame();
@@ -83,35 +86,36 @@ class _GameAppState extends State<GameApp> {
                           game: game,
                           overlayBuilderMap: {
                             // If player is falling too much, add fall alert overlay.
-                            'FallAlert': (context, overlayGame) => const FallAlert(
-                                fallAlertText: 'Stop falling or you lose!'),
+                            'FallAlert': (context, overlayGame) =>
+                                const FallAlert(
+                                    fallAlertText: 'Stop falling or you lose!'),
 
-                            'ScoreCounter': (context, overlayGame) => ScoreCounter(currentScore: game.heightScore, highScore: game.highScores.value, difficulty: game.gameDifficulty.value),
-                            
+                            'ScoreCounter': (context, overlayGame) =>
+                                ScoreCounter(
+                                    currentScore: game.heightScore,
+                                    highScore: game.highScores.value,
+                                    difficulty: game.gameDifficulty.value),
+
                             GameState.start.name: (context, overlayGame) =>
-                                LevelScreen(handleStartGame, highScore: game.highScores.value),
+                                LevelScreen(handleStartGame,
+                                    highScore: game.highScores.value),
 
                             GameState.lose.name: (context, overlayGame) =>
                                 GameEndingScreen(
-                                  handleStartGame,
-                                  handleLevelScreen,
-                                  gameEndStatus:
-                                      'You lost the game!',
-                                  gameEndDesc:
-                                      'No worries! You can always try again!',
-                                  highScore: game.highScores.value,
-                                  difficulty: game.gameDifficulty.value
-                                ),
+                                    handleStartGame, handleLevelScreen,
+                                    gameEndStatus: 'You lost the game!',
+                                    gameEndDesc:
+                                        'No worries! You can always try again!',
+                                    highScore: game.highScores.value,
+                                    difficulty: game.gameDifficulty.value),
 
                             GameState.win.name: (context, overlayGame) =>
                                 GameEndingScreen(
-                                  handleStartGame,
-                                  handleLevelScreen,
-                                  gameEndStatus: 'WOW! You won!',
-                                  gameEndDesc: 'Want to try again?',
-                                  highScore: game.highScores.value,
-                                  difficulty: game.gameDifficulty.value
-                                ),
+                                    handleStartGame, handleLevelScreen,
+                                    gameEndStatus: 'WOW! You won!',
+                                    gameEndDesc: 'Want to try again?',
+                                    highScore: game.highScores.value,
+                                    difficulty: game.gameDifficulty.value),
                           },
                         ),
                       ),

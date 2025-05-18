@@ -26,7 +26,7 @@ class PlayArea extends RectangleComponent
 
     // Avoid dragUpdates if the gameplay is not active
     if (game.gameState == GameState.playing){
-      game.player.position.x = (game.player.position.x + event.localDelta.x).clamp(0, cameraWidth);
+      game.player.position.x = (game.player.position.x + event.localDelta.x).clamp(0, playWidth);
     }
   }
 
@@ -45,7 +45,7 @@ class PlayArea extends RectangleComponent
 
 
     // Draw vertical lines
-    for (double x = 0; x <= size.x - 1; x += gridSize) {
+    for (double x = 0; x <= size.x + 1; x += gridSize) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.y), gridPaint);
     }
 

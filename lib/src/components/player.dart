@@ -1,8 +1,7 @@
-
 import 'package:doodle_maze/src/components/booster.dart';
 import 'package:doodle_maze/src/components/goal.dart';
+import 'package:doodle_maze/src/components/spring.dart';
 import 'package:doodle_maze/src/components/trap.dart';
-import 'package:doodle_maze/src/components/wall.dart';
 import 'package:doodle_maze/src/config.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -16,7 +15,7 @@ class Player extends SpriteComponent
 
   var velocity = Vector2(0, 0);
   final dragCoolDown = 5;
-  final gravity = Vector2(0, 300);
+  final gravity = Vector2(0, gravityY);
 
   double? highestPoint;
   double fallLength = 0.0;
@@ -83,27 +82,24 @@ class Player extends SpriteComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
 
-    if (other is Wall) {
-      velocity = Vector2(0, -brickVelocity);
-    }
-
+    // Activate jump if player is detected falling down and colliding with brick.
     if (other is Brick && game.player.velocity.y >= 0) {
       velocity = Vector2(0, -brickVelocity);
       other.removeFromParent();
     }
 
+    // Booster gives more velocity compared to normally jumping through bricks.
     if (other is Booster) {
       velocity = Vector2(0, -game.levelModifier.boosterVelocity);
       other.removeFromParent();
     }
 
+    // Element which ends the game and causes player to win.
     if (other is Goal) {
       game.heightScore.value = 30;
       game.gameState = GameState.win;
-
       // Save win highScore
       game.saveHighScore(game.gameDifficulty.value, game.heightScore.value);
-
       game.handleElementRemove();
     }
 
@@ -113,6 +109,16 @@ class Player extends SpriteComponent
       // Save highScore
       game.saveHighScore(game.gameDifficulty.value, game.heightScore.value);
       game.handleElementRemove();
+    }
+
+    // Activate spring if colliding with spring, the spring is not activated and the player is going upwards.
+    if (other is Spring && !other.springActivated && game.player.velocity.y <= 0) {
+      //set activated flag to not allow second collision
+      other.springActivated = true;
+      //push the player back
+      velocity = Vector2(0, springVelocity);
+      // + change the sprite to show activated spring
+      other.sprite = game.extraSprites.getSprite('spring_out');
     }
   }
 }
