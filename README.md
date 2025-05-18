@@ -19,6 +19,8 @@ On normal desktop/computer environment you can use your mouse to drag the player
 
 If you want to locally try the game, clone the source files in your desired location.
 
+Source code is located here: https://github.com/JuhanaTa/doodle_game
+
 Game is created using Flutter, Dart and it is based on top of the Flame Engine. https://docs.flame-engine.org/latest/
 
 Setup your Flutter development environment by following the guidelines shown here:
