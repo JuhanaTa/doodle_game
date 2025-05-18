@@ -42,8 +42,8 @@ const trapSpawnSeparationHard = 400.0; //Hard
 const springHeight = 64.0;
 const springWidth = 64.0;
 const springVelocity = 500.0;
-const springSpawnSeparation = 1600.0; //Easy
-const springSpawnSeparationMedium = 1300.0; // Normal
+const springSpawnSeparation = 1800.0; //Easy
+const springSpawnSeparationMedium = 1500.0; // Normal
 const springSpawnSeparationHard = 1000.0; // Hard
 
 class LevelModifier {

@@ -1,7 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import '../doodle_game.dart';
-import 'dart:math' as math;
 
 class Spring extends SpriteComponent with HasGameReference<DoodleGame> {
   Spring({required super.position, required super.size, required super.sprite})

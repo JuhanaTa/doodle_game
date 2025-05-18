@@ -38,7 +38,9 @@ class Player extends SpriteComponent
 
     // If the player is detected falling down,
     if (velocity.y >= 0) {
-      sprite = game.characters.getSprite('frog_idle');
+
+      if(sprite != game.playerSprite){sprite = game.playerSprite;}
+
       // Assign highestPoint only if it is null
       // with ??= dart operator
       highestPoint ??= position.y;
@@ -70,8 +72,8 @@ class Player extends SpriteComponent
         game.handleElementRemove();
       }
     } else {
+      if(sprite != game.jumpPlayerSprite){sprite = game.jumpPlayerSprite;}
       // Highest point will be resetted when falling ends.
-      sprite = game.characters.getSprite('frog_jump');
       highestPoint = null;
       game.overlays.remove('FallAlert');
     }
@@ -118,7 +120,7 @@ class Player extends SpriteComponent
       //push the player back
       velocity = Vector2(0, springVelocity);
       // + change the sprite to show activated spring
-      other.sprite = game.extraSprites.getSprite('spring_out');
+      other.sprite = game.springActiveSprite;
     }
   }
 }
