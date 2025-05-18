@@ -1,3 +1,4 @@
+import 'package:doodle_maze/src/config.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import '../doodle_game.dart';
@@ -7,11 +8,12 @@ class Trap extends SpriteComponent with HasGameReference<DoodleGame> {
   Trap({required super.position, required super.size, required super.sprite})
       : super(
           anchor: Anchor.center,
-          children: [RectangleHitbox()],
+          children: [CircleHitbox()],
         );
 
   final rand = math.Random();
-  var velocity = Vector2(75, 0);
+  var velocity = Vector2(trapVelocity, 0);
+
   double lastMoveChange = 0;
   double moveTimeOut = 0;
 
@@ -31,9 +33,9 @@ class Trap extends SpriteComponent with HasGameReference<DoodleGame> {
     if (lastMoveChange >= moveTimeOut) {
 
       if (velocity.x < 0) {
-        velocity.x = 75;
+        velocity.x = trapVelocity;
       } else {
-        velocity.x = -75;
+        velocity.x = -trapVelocity;
       }
 
       lastMoveChange = 0;

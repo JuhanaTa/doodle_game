@@ -6,13 +6,16 @@ const cameraHeight = 1600.0;
 const playWidth = cameraWidth;
 const playHeight = 30000.0;
 
+// player
+const playerWidth = 64.0;
+const playerHeight = 64.0;
 const gravityY = 1000.0;
 
 // Bricks
 const brickWidth = 100.0;
 const brickHeight = 25.0;
 const brickSpawnSeparation = 200.0; //Easy
-const brickSpawnSeparationMedium = 300.0; //Normal
+const brickSpawnSeparationMedium = 200.0; //Normal
 const brickSpawnSeparationHard = 400.0; //Hard
 const brickRenderHeights = [];
 const brickVelocity = 1000.0;
@@ -35,8 +38,9 @@ const goalHeight = 64.0;
 const trapWidth = 64.0;
 const trapheight = 64.0;
 const trapSpawnSeparation = 800.0; //Easy
-const trapSpawnSeparationMedium = 700.0; //Normal
+const trapSpawnSeparationMedium = 600.0; //Normal
 const trapSpawnSeparationHard = 400.0; //Hard
+const trapVelocity = 75.0;
 
 // Spring
 const springHeight = 64.0;
@@ -46,6 +50,7 @@ const springSpawnSeparation = 1800.0; //Easy
 const springSpawnSeparationMedium = 1500.0; // Normal
 const springSpawnSeparationHard = 1000.0; // Hard
 
+// Class where current difficulty modifiers are stored.
 class LevelModifier {
   int difficulty;
   double boosterVelocity;

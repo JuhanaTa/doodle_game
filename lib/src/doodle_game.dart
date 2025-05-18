@@ -11,7 +11,6 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_kenney_xml/flame_kenney_xml.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive_ce/hive.dart';
 import 'config.dart';
 import 'dart:math' as math;
@@ -100,6 +99,7 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
   FutureOr<void> onLoad() async {
     super.onLoad();
 
+
     final sprites = await Future.wait([
       XmlSpriteSheet.load(
         imagePath: 'spritesheet_tiles.png',
@@ -141,6 +141,7 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
 
     // Assign starting game state
     gameState = GameState.start;
+    
   }
 
   // Saves highcores as Map to hive to get them after application restart
@@ -184,6 +185,7 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
     player = Player(
         position: Vector2(playWidth / 2, playHeight - 800),
         velocity: Vector2(0, 0),
+        size: Vector2(playerWidth, playerHeight),
         sprite: playerSprite);
 
     world.add(player);
@@ -274,16 +276,5 @@ class DoodleGame extends FlameGame with HasCollisionDetection, KeyboardEvents {
 
   void returnToLevels() {
     gameState = GameState.start;
-  }
-
-  @override
-  KeyEventResult onKeyEvent(
-      KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    super.onKeyEvent(event, keysPressed);
-    switch (event.logicalKey) {
-      case LogicalKeyboardKey.arrowLeft:
-      case LogicalKeyboardKey.arrowRight:
-    }
-    return KeyEventResult.handled;
   }
 }

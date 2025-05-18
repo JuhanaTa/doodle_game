@@ -10,8 +10,8 @@ import 'brick.dart';
 
 class Player extends SpriteComponent
     with CollisionCallbacks, HasGameReference<DoodleGame> {
-  Player({required this.velocity, required super.position, required super.sprite})
-      : super(anchor: Anchor.center, children: [RectangleHitbox()]);
+  Player({required this.velocity, required super.position, required super.size, required super.sprite})
+      : super(anchor: Anchor.center, children: [CircleHitbox()]);
 
   var velocity = Vector2(0, 0);
   final dragCoolDown = 5;
@@ -26,7 +26,10 @@ class Player extends SpriteComponent
     velocity += gravity * dt;
     position += velocity * dt;
 
-    int newScore = 30 - (((position.y + 999) ~/ 1000) * 1000 / 1000).toInt();
+    // Score is increased by one when player passes a chunk (1 chunk is the range of 0-1000 of position.y/height)
+    // E.g. if height is 25500 the score is 4, or if 24050 the score is 5
+    // ChatGpt helped to make this calculation more simple.
+    int newScore = 30 - ((y + 999) ~/ 1000);
 
     if (newScore >= 30) {
       game.heightScore.value = 30;
@@ -45,6 +48,7 @@ class Player extends SpriteComponent
       // with ??= dart operator
       highestPoint ??= position.y;
 
+      // keep track of highest position under which the fall is calculated
       if (position.y < highestPoint!) {
         highestPoint = position.y;
       }
@@ -52,6 +56,7 @@ class Player extends SpriteComponent
       // Calculate updated length of fall
       fallLength = position.y - highestPoint!;
 
+      // Show fall alert if player has fallen enough
       if (fallLength > cameraHeight / 3) {
         game.overlays.add('FallAlert');
       }

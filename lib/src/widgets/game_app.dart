@@ -89,17 +89,14 @@ class _GameAppState extends State<GameApp> {
                             'FallAlert': (context, overlayGame) =>
                                 const FallAlert(
                                     fallAlertText: 'Stop falling or you lose!'),
-
                             'ScoreCounter': (context, overlayGame) =>
                                 ScoreCounter(
                                     currentScore: game.heightScore,
                                     highScore: game.highScores.value,
                                     difficulty: game.gameDifficulty.value),
-
                             GameState.start.name: (context, overlayGame) =>
                                 LevelScreen(handleStartGame,
                                     highScore: game.highScores.value),
-
                             GameState.lose.name: (context, overlayGame) =>
                                 GameEndingScreen(
                                     handleStartGame, handleLevelScreen,
